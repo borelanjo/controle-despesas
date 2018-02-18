@@ -1,4 +1,4 @@
-package com.borelanjo.despesas.web;
+package com.borelanjo.despesas.application.controller;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.borelanjo.despesas.domain.Account;
-import com.borelanjo.despesas.domain.TransactionHistory;
-import com.borelanjo.despesas.domain.TransferDTO;
-import com.borelanjo.despesas.enumeration.TransactionType;
-import com.borelanjo.despesas.service.AccountService;
+import com.borelanjo.despesas.domain.enumeration.TransactionType;
+import com.borelanjo.despesas.domain.model.Account;
+import com.borelanjo.despesas.domain.model.TransactionHistory;
+import com.borelanjo.despesas.domain.service.AccountService;
+import com.borelanjo.despesas.presentation.dto.TransferDTO;
 
 @Controller
 public class AccountController {

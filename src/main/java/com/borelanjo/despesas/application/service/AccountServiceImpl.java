@@ -1,4 +1,4 @@
-package com.borelanjo.despesas.service;
+package com.borelanjo.despesas.application.service;
 
 import java.util.List;
 
@@ -7,9 +7,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.borelanjo.despesas.domain.Account;
-import com.borelanjo.despesas.domain.TransactionHistory;
-import com.borelanjo.despesas.enumeration.TransactionType;
+import com.borelanjo.despesas.domain.enumeration.TransactionType;
+import com.borelanjo.despesas.domain.model.Account;
+import com.borelanjo.despesas.domain.model.TransactionHistory;
+import com.borelanjo.despesas.domain.service.AccountService;
+import com.borelanjo.despesas.infrastructure.persistence.hibernate.repository.AccountRepository;
+import com.borelanjo.despesas.infrastructure.persistence.hibernate.repository.TransactionHistoryRepository;
 
 @Component("accountService")
 @Transactional

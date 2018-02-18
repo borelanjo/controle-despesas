@@ -1,4 +1,4 @@
-package com.borelanjo.despesas.domain;
+package com.borelanjo.despesas.presentation.dto;
 
 import java.io.Serializable;
 

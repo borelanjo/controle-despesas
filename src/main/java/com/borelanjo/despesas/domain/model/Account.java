@@ -1,17 +1,19 @@
-package com.borelanjo.despesas.domain;
+package com.borelanjo.despesas.domain.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+
+import com.borelanjo.despesas.infrastructure.persistence.hibernate.listener.AccountListener;
 
 @Entity(name = "t_account")
+@EntityListeners(AccountListener.class)
 public class Account implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -27,10 +29,10 @@ public class Account implements Serializable {
 	private Double balance;
 
 	@Column(name = "dt_created", nullable = true)
-	private Date created;
+	private LocalDateTime created;
 
 	@Column(name = "dt_updated", nullable = true)
-	private Date updated;
+	private LocalDateTime updated;
 
 	protected Account() {
 	}
@@ -65,23 +67,45 @@ public class Account implements Serializable {
 		this.balance = balance;
 	}
 
-	public Date getCreated() {
+	public LocalDateTime getCreated() {
 		return created;
 	}
 
-	public Date getUpdated() {
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
+
+	public LocalDateTime getUpdated() {
 		return updated;
 	}
 
-	@PrePersist
-	protected void onCreate() {
-		created = new Date();
-		updated = new Date();
+	public void setUpdated(LocalDateTime updated) {
+		this.updated = updated;
 	}
 
-	@PreUpdate
-	protected void onUpdate() {
-		updated = new Date();
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Account other = (Account) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 	@Override

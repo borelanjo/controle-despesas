@@ -1,10 +1,10 @@
-package com.borelanjo.despesas.service;
+package com.borelanjo.despesas.infrastructure.persistence.hibernate.repository;
 
 import java.util.List;
 
 import org.springframework.data.repository.Repository;
 
-import com.borelanjo.despesas.domain.Account;
+import com.borelanjo.despesas.domain.model.Account;
 
 public interface AccountRepository extends Repository<Account, Long>{
 	

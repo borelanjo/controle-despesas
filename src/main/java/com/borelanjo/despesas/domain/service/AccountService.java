@@ -1,10 +1,10 @@
-package com.borelanjo.despesas.service;
+package com.borelanjo.despesas.domain.service;
 
 import java.util.List;
 
-import com.borelanjo.despesas.domain.Account;
-import com.borelanjo.despesas.domain.TransactionHistory;
-import com.borelanjo.despesas.enumeration.TransactionType;
+import com.borelanjo.despesas.domain.enumeration.TransactionType;
+import com.borelanjo.despesas.domain.model.Account;
+import com.borelanjo.despesas.domain.model.TransactionHistory;
 
 public interface AccountService {
 	

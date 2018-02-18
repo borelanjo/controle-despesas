@@ -1,4 +1,4 @@
-package com.borelanjo.despesas.enumeration;
+package com.borelanjo.despesas.domain.enumeration;
 
 public enum TransactionType {
 	DECREASE("Despesa"), INCREASE("Receita");

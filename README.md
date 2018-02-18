@@ -1,7 +1,7 @@
-#desafio-despesas-elton-leite
+# desafio-despesas-elton-leite
 
 Projeto de desafio feito por Elton Leite Ayres de Medeiros Borges
-##Passos para execução
+## Passos para execução
 
 Para que o projeto seja executado é necessário que:
 
@@ -10,7 +10,7 @@ Para que o projeto seja executado é necessário que:
  - Deve-se executar o `src\main\java\com\borelanjo\despesas\DespesasApplication.java` como uma aplicação java para iniciar a aplicação;
 	 - Pode ser importado no Postman o arquivo contido em: `src\main\resources\despesas-elton-leite.postman_collection.json`
 
-##O que foi feito
+## O que foi feito
 
 Foi criado uma aplicação restfull, usando JPA com Implementação Hibernate e o framework Spring. Pode ser testado a aplicação usando as seguintes url;
 
@@ -18,18 +18,18 @@ Foi criado uma aplicação restfull, usando JPA com Implementação Hibernate e 
 
 Usado para criar uma conta.
 
-####HEADERS
+#### HEADERS
 |Content-Type|application/json|
 |-|-|
 
-####BODY
+#### BODY
 ```
 {
 "accountNumber":123456,
 "balance":1000.500
 }
 ```
-####Exemplo de requisição
+#### Exemplo de requisição
 
 ```
 curl --request POST \
@@ -41,22 +41,22 @@ curl --request POST \
 }'
 ```
 
-###  PATCH localhost:8080/account/123460
+### PATCH localhost:8080/account/123460
 
 Utilizado para atualizar um balanço. O tipo deve ser passado como DECREASE (Despesa) ou INCREASE (Receita) e ele que determina se o valor vai ser positivo ou negativo.
 
-####HEADERS
+#### HEADERS
 |Content-Type|application/json|
 |-|-|
 
-####BODY
+#### BODY
 ```
 {
 "type":"DECREASE",
 "value":1.0
 }
 ```
-####Exemplo de requisição
+#### Exemplo de requisição
 
 ```
 curl --request PATCH \
@@ -68,17 +68,17 @@ curl --request PATCH \
 }'
 ```
 
-###  GET localhost:8080/account
+### GET localhost:8080/account
 
 Retorna um objeto do tipo conta recebendo um número de conta como parâmetro
 `localhost:8080/account/123456`
 
-####HEADERS
+#### HEADERS
 |Content-Type|application/json|
 |-|-|
 
 
-####Exemplo de requisição
+#### Exemplo de requisição
 
 ```
 curl --request GET \
@@ -86,24 +86,24 @@ curl --request GET \
   --header 'content-type: application/json'
 ```
 
-###  localhost:8080/account/123460/transfer
+### localhost:8080/account/123460/transfer
 
 Realiza uma transferência de uma conta de origem para uma conta de destino
 
 `localhost:8080/account/:sourceAccountNumber/transfer`
 
-####HEADERS
+#### HEADERS
 |Content-Type|application/json|
 |-|-|
 
-####BODY
+#### BODY
 ```
 {
 "destinationAccountNumber":180626,
 "value":5.3
 }
 ```
-####Exemplo de requisição
+#### Exemplo de requisição
 
 ```
 curl --request PUT \
@@ -115,18 +115,18 @@ curl --request PUT \
 }'
 ```
 
-###  GET http://localhost:8080/account/123460/transactionHistory
+### GET http://localhost:8080/account/123460/transactionHistory
 
 Mostra o histórico de transações de uma determinada conta.
 
 `http://localhost:8080/account/123460/transactionHistory`
 
-####HEADERS
+#### HEADERS
 |Content-Type|application/json|
 |-|-|
 
 
-####Exemplo de requisição
+#### Exemplo de requisição
 
 ```
 curl --request GET \

@@ -6,22 +6,23 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
 
-@Entity
+@Entity(name = "t_transaction_history")
 public class TransactionHistory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "transaction_history_generator", sequenceName = "transaction_history_sequence", initialValue = 28)
-	@GeneratedValue(generator = "transaction_history_generator")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(optional = false)
+	@JoinColumn(name = "id_account")
 	private Account account;
 
 	@Column(nullable = false)
@@ -33,7 +34,7 @@ public class TransactionHistory implements Serializable {
 	@Column(nullable = false)
 	private Double value;
 
-	@Column(nullable = false)
+	@Column(name = "dt_created", nullable = false)
 	private Date created;
 
 	protected TransactionHistory() {

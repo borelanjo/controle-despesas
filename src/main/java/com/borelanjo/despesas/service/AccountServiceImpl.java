@@ -37,9 +37,9 @@ public class AccountServiceImpl implements AccountService {
 	public TransactionHistory addTransaction(Integer accountNumber, TransactionType transactionType, Double value) {
 		Account account = this.accountRepository.findOneByAccountNumber(accountNumber);
 		Assert.notNull(account, "Conta não deve ser nula");
-		String description = transactionType.type()+ ": R$ "+value+". Novo Saldo: R$"+account.getBalance();
 		value = fixValue(transactionType, value);
 		account.setBalance(account.getBalance()+ value);
+		String description = transactionType.type()+ ": R$ "+value+". Novo Saldo: R$"+account.getBalance();
 		this.accountRepository.save(account);
 		TransactionHistory transactionHistory = new TransactionHistory(account, transactionType.type(), description, value);
 		TransactionHistory result = transactionHistoryRepository.save(transactionHistory);

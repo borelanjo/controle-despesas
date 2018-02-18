@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.borelanjo.despesas.builder.AccountBuilder;
 import com.borelanjo.despesas.domain.enumeration.TransactionType;
 import com.borelanjo.despesas.domain.model.Account;
 import com.borelanjo.despesas.domain.model.TransactionHistory;
@@ -34,11 +35,15 @@ public class AccountServiceImplIntegrationTests {
 	@Test
 	public void createAccount() {
 
-		List<Account> accounts = this.accountRepository.findAll();
-		Integer accountNumber = 456789 + accounts.size();
+		Account accountExpected = new AccountBuilder()
+				.withAccountNumber(1111)
+				.withBalance(10000.0)
+				.build();
 
-		Account account = this.serviceImpl.createAccount(accountNumber, 55.54);
-		assertThat(account.getBalance()).isEqualTo(55.54);
+		Account result = this.serviceImpl.createAccount(accountExpected.getAccountNumber(), accountExpected.getBalance());
+		
+		assertThat(result.getBalance()).isEqualTo(accountExpected.getBalance());
+		assertThat(result.getAccountNumber()).isEqualTo(accountExpected.getAccountNumber());
 	}
 
 	@Test

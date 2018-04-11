@@ -13,5 +13,5 @@ create table t_transaction_history (
     value DECIMAL(10,2) not null,
     id_account BIGINT,
     dt_created TIMESTAMP WITHOUT TIME ZONE not null,
-    CONSTRAINT transaction_history_account_id_account FOREIGN KEY (id_account) REFERENCES t_account (id)
+    CONSTRAINT transaction_history_account_id_account FOREIGN KEY (id_account) REFERENCES t_account (id) ON DELETE CASCADE
 );

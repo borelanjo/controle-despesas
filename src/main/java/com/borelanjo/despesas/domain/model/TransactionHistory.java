@@ -12,8 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.borelanjo.despesas.infrastructure.persistence.hibernate.listener.TransactionHistoryListener;
+
 @Entity(name = "t_transaction_history")
-@EntityListeners(TransactionHistory.class)
+@EntityListeners(TransactionHistoryListener.class)
 public class TransactionHistory implements Serializable {
 
 	private static final long serialVersionUID = 1L;

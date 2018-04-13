@@ -29,7 +29,7 @@ services:
     container_name: despesas-service
     image: despesas-service
     restart: always
-    links:
+    depends_on:
       - db-despesas
     ports:
       - "8080:8080"

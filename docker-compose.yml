@@ -10,6 +10,7 @@ services:
     container_name: db-despesas
     image: postgres:9.6
     restart: always
+    hostname: db-despesas
     ports:
       - "5432:5432"
     environment:
@@ -19,3 +20,18 @@ services:
       PGDATA: /tmp
     volumes:
       - ./docker/postgres/data-despesa:/var/lib/postgresql/data
+
+  #############################################################
+  ######################### SERVICES ##########################
+  #############################################################
+
+  despesas-service:
+    container_name: despesas-service
+    image: despesas-service
+    restart: always
+    links:
+      - db-despesas
+    ports:
+      - "8080:8080"
+    environment:
+      DB_ALIAS: db-despesas

@@ -5,7 +5,7 @@ spring:
 # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_ALIAS}:5432/despesas?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://${DB_ALIAS:localhost}:5432/despesas?createDatabaseIfNotExist=true
     username: despesas
     password: despesas
 # JPA properties

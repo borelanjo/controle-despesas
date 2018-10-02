@@ -22,6 +22,10 @@ import com.borelanjo.despesas.domain.service.AccountService;
 import com.borelanjo.despesas.infrastructure.service.ResponseServiceImpl;
 import com.borelanjo.despesas.presentation.dto.ResponseTO;
 import com.borelanjo.despesas.presentation.dto.TransferDTO;
+import com.borelanjo.despesas.presentation.dto.account.AccountRequestTO;
+import com.borelanjo.despesas.presentation.dto.account.AccountResponseTO;
+
+import org.modelmapper.ModelMapper;
 
 @RestController
 @RequestMapping("/account")
@@ -32,12 +36,16 @@ public class AccountController {
     
     @Autowired
     private ResponseServiceImpl responseService;
+    
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping
     @ResponseBody
     @Transactional(readOnly = false)
-    public ResponseEntity<ResponseTO<Account>> createAccount(@RequestBody Account account) {
-        return responseService.ok(accountService.createAccount(account.getAccountNumber(), account.getBalance()));
+    public ResponseEntity<ResponseTO<AccountResponseTO>> createAccount(@RequestBody AccountRequestTO requestTO) {
+        Account account = accountService.save(modelMapper.map(requestTO, Account.class));
+        return responseService.ok(modelMapper.map(account, AccountResponseTO.class));
     }
 
     @GetMapping("/{accountNumber}")

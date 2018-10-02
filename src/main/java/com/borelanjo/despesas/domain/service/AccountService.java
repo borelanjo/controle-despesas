@@ -8,7 +8,7 @@ import com.borelanjo.despesas.domain.model.TransactionHistory;
 
 public interface AccountService {
 
-    Account createAccount(Integer accountNumber, Double balance);
+    Account save(Account account);
 
     Account getAccount(Integer accountNumber);
 

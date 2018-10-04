@@ -28,3 +28,7 @@ logging:
 server:
   port: 8080
   sessionTimeout: 30
+  
+desafio-despesas:
+  security:
+    allow-origin: ${ALLOWED_ORIGIN:http://localhost:4200}

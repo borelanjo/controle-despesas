@@ -16,6 +16,6 @@ public interface AccountService<T,ID> extends BaseService<T, ID>{
 
     TransactionHistory transfer(Integer sourceAccount, Integer destinationAccount, Double value);
 
-    List<TransactionHistory> showHistory(Integer accountNumber);
+    List<TransactionHistory> showHistory(Long id);
 
 }

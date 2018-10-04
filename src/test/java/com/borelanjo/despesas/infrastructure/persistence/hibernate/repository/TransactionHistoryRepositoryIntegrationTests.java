@@ -23,82 +23,77 @@ import com.borelanjo.despesas.domain.model.TransactionHistory;
 @ActiveProfiles("test")
 public class TransactionHistoryRepositoryIntegrationTests {
 
-	@Autowired
-	TransactionHistoryRepository repository;
+    @Autowired
+    TransactionHistoryRepository repository;
 
-	@Autowired
-	AccountRepository accountRepository;
-	
-	@Before
-	public void setUp() {
-		repository.deleteAll();
-		this.accountRepository.deleteAll();
-	}
+    @Autowired
+    AccountRepository accountRepository;
 
-	@Test
-	public void createTransactionHistory() {
-		
-		Account accountExpected = new AccountBuilder()
-				.withAccountNumber(123460)
-				.withBalance(5.0)
-				.build();
-		accountExpected = this.accountRepository.save(accountExpected);
-		
-		TransactionHistory transactionHistory = new TransactionHistoryBuilder()
-				.withAccount(accountExpected)
-				.withType(TransactionType.DECREASE)
-				.withDescription("Saque conta corrente no valor de R$ 25,00")
-				.withValue(-25.0)
-				.build();
+    @Before
+    public void setUp() {
+        repository.deleteAll();
+        this.accountRepository.deleteAll();
+    }
 
-		TransactionHistory result = this.repository.save(transactionHistory);
-		assertThat(result.getValue()).isEqualTo(-25.0);
-	}
+    @Test
+    public void createTransactionHistory() {
 
-	@Test
-	public void findAllTransactionHistory() {
-		Account accountExpected = this.accountRepository.save(new AccountBuilder()
-				.withAccountNumber(123460)
-				.withBalance(5.0)
-				.build());
-		
+        Account accountExpected = new AccountBuilder()
+                .withAccountNumber(123460)
+                .withBalance(5.0).build();
+        
+        accountExpected = this.accountRepository.save(accountExpected);
 
-		repository.save(new TransactionHistoryBuilder()
-				.withAccount(accountExpected)
-				.withType(TransactionType.DECREASE)
-				.withDescription("Saque conta corrente no valor de R$ 25,00")
-				.withValue(-25.0)
-				.build());
+        TransactionHistory transactionHistory = new TransactionHistoryBuilder()
+                .withAccount(accountExpected)
+                .withType(TransactionType.DECREASE).withDescription("Saque conta corrente no valor de R$ 25,00")
+                .withValue(-25.0).build();
 
+        TransactionHistory result = this.repository.save(transactionHistory);
+        assertThat(result.getValue()).isEqualTo(-25.0);
+    }
 
-		List<TransactionHistory> transactionHistories = this.repository.findAll();
-		assertThat(transactionHistories.size()).isGreaterThan(0);
-	}
+    @Test
+    public void findAllTransactionHistory() {
+        Account accountExpected = this.accountRepository
+                .save(new AccountBuilder()
+                        .withAccountNumber(123460)
+                        .withBalance(5.0)
+                        .build());
 
-	@Test
-	public void findAllTransactionHistoryByAccount() {
-		Account accountExpected = this.accountRepository.save(new AccountBuilder()
-				.withAccountNumber(123460)
-				.withBalance(5.0)
-				.build());
-		
+        repository.save(new TransactionHistoryBuilder()
+                .withAccount(accountExpected)
+                .withType(TransactionType.DECREASE)
+                .withDescription("Saque conta corrente no valor de R$ 25,00")
+                .withValue(-25.0)
+                .build());
 
-		repository.save(new TransactionHistoryBuilder()
-				.withAccount(accountExpected)
-				.withType(TransactionType.DECREASE)
-				.withDescription("Saque conta corrente no valor de R$ 25,00")
-				.withValue(-25.0)
-				.build());
-		
-		repository.save(new TransactionHistoryBuilder()
-				.withAccount(accountExpected)
-				.withType(TransactionType.DECREASE)
-				.withDescription("Saque conta corrente no valor de R$ 25,00")
-				.withValue(-25.0)
-				.build());
+        List<TransactionHistory> transactionHistories = this.repository.findAll();
+        assertThat(transactionHistories.size()).isGreaterThan(0);
+    }
 
-		List<TransactionHistory> transactionHistory = this.repository.findByAccount(accountExpected);
-		assertThat(transactionHistory.size()).isGreaterThan(1);
-	}
+    @Test
+    public void findAllTransactionHistoryByAccount() {
+        Account accountExpected = this.accountRepository
+                .save(new AccountBuilder()
+                        .withAccountNumber(123460)
+                        .withBalance(5.0)
+                        .build());
+
+        repository.save(new TransactionHistoryBuilder()
+                .withAccount(accountExpected)
+                .withType(TransactionType.DECREASE)
+                .withDescription("Saque conta corrente no valor de R$ 25,00")
+                .withValue(-25.0).build());
+
+        repository.save(new TransactionHistoryBuilder()
+                .withAccount(accountExpected)
+                .withType(TransactionType.DECREASE)
+                .withDescription("Saque conta corrente no valor de R$ 25,00")
+                .withValue(-25.0).build());
+
+        List<TransactionHistory> transactionHistory = this.repository.findByAccountId(accountExpected.getId());
+        assertThat(transactionHistory.size()).isGreaterThan(1);
+    }
 
 }

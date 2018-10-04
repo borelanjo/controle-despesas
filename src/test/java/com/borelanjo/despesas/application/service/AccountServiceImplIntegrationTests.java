@@ -87,11 +87,17 @@ public class AccountServiceImplIntegrationTests {
         Integer sourceAccountNumber = 123460;
         Integer destinationAccountNumber = 456790;
 
-        this.accountRepository
-                .save(new AccountBuilder().withAccountNumber(sourceAccountNumber).withBalance(1000.0).build());
+        Long sourceAccountId = this.accountRepository
+                .save(new AccountBuilder()
+                        .withAccountNumber(sourceAccountNumber)
+                        .withBalance(1000.0)
+                        .build()).getId();
 
-        this.accountRepository
-                .save(new AccountBuilder().withAccountNumber(destinationAccountNumber).withBalance(5.0).build());
+        Long destinationAccountId = this.accountRepository
+                .save(new AccountBuilder()
+                        .withAccountNumber(destinationAccountNumber)
+                        .withBalance(5.0)
+                        .build()).getId();
 
         this.serviceImpl.transfer(sourceAccountNumber, destinationAccountNumber, 5.0);
         this.serviceImpl.transfer(sourceAccountNumber, destinationAccountNumber, 10.0);
@@ -100,9 +106,9 @@ public class AccountServiceImplIntegrationTests {
         this.serviceImpl.addTransaction(sourceAccountNumber, TransactionType.INCREASE, 5.0);
         this.serviceImpl.addTransaction(sourceAccountNumber, TransactionType.DECREASE, 20.0);
 
-        List<TransactionHistory> sourceAccountTransactionHistories = this.serviceImpl.showHistory(sourceAccountNumber);
+        List<TransactionHistory> sourceAccountTransactionHistories = this.serviceImpl.showHistory(sourceAccountId);
         List<TransactionHistory> destinationTransactionHistories = this.serviceImpl
-                .showHistory(destinationAccountNumber);
+                .showHistory(destinationAccountId);
         assertThat(sourceAccountTransactionHistories.size()).isEqualTo(6);
         assertThat(destinationTransactionHistories.size()).isEqualTo(4);
     }

@@ -48,22 +48,22 @@ public class AccountController {
         return responseService.ok(modelMapper.map(account, AccountResponseTO.class));
     }
 
-    @GetMapping("/{accountNumber}")
+    @GetMapping("/{id}")
     @ResponseBody
     @Transactional(readOnly = true)
-    public ResponseEntity<ResponseTO<Account>> getAccount(@PathVariable("accountNumber") Integer accountNumber) {
-        return responseService.ok(accountService.findByAccount(accountNumber));
+    public ResponseEntity<ResponseTO<AccountResponseTO>> getAccount(@PathVariable("id") Long id) {
+        return responseService.ok(modelMapper.map(accountService.findById(id).get(), AccountResponseTO.class));
     }
 
-    @GetMapping("/{accountNumber}/transactionHistory")
+    @GetMapping("/{id}/transactionHistory")
     @ResponseBody
     @Transactional(readOnly = true)
-    public ResponseEntity<ResponseTO<List<TransactionHistory>>> showHistory(@PathVariable("accountNumber") Integer accountNumber) {
+    public ResponseEntity<ResponseTO<List<TransactionHistory>>> showHistory(@PathVariable("id") Long id) {
 
-        return responseService.ok(accountService.showHistory(accountNumber));
+        return responseService.ok(accountService.showHistory(id));
     }
 
-    @PatchMapping("/{accountNumber}")
+    @PatchMapping("/{id}/transactionHistory")
     @ResponseBody
     @Transactional(readOnly = false)
     public ResponseEntity<ResponseTO<TransactionHistory>> setBalance(@PathVariable("accountNumber") Integer accountNumber,

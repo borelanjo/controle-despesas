@@ -75,9 +75,8 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implement
         return result;
     }
 
-    public List<TransactionHistory> showHistory(Integer accountNumber) {
-        Account account = this.accountRepository.findOneByAccountNumber(accountNumber);
-        List<TransactionHistory> transactionHistories = transactionHistoryRepository.findByAccount(account);
+    public List<TransactionHistory> showHistory(Long id) {
+        List<TransactionHistory> transactionHistories = transactionHistoryRepository.findByAccountId(id);
         return transactionHistories;
     }
 

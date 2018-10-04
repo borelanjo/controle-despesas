@@ -21,15 +21,15 @@ import org.springframework.stereotype.Component;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilterConfiguration implements Filter {
 
-    @Value("${bancario-service.seguranca.origem-permitida}")
-    private String origemPermitida;
+    @Value("${desafio-despesas.security.allow-origin}")
+    private String allowOrigin;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        String origin = origemPermitida;
+        String origin = allowOrigin;
 
         res.setHeader("Access-Control-Allow-Origin", origin);
         res.setHeader("Access-Control-Allow-Credentials", "true");

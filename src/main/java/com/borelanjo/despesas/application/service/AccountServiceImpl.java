@@ -12,11 +12,12 @@ import com.borelanjo.despesas.domain.model.Account;
 import com.borelanjo.despesas.domain.model.TransactionHistory;
 import com.borelanjo.despesas.domain.service.AccountService;
 import com.borelanjo.despesas.infrastructure.persistence.hibernate.repository.AccountRepository;
+import com.borelanjo.despesas.infrastructure.persistence.hibernate.repository.BaseRepository;
 import com.borelanjo.despesas.infrastructure.persistence.hibernate.repository.TransactionHistoryRepository;
 
 @Component("accountService")
 @Transactional
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implements AccountService<Account, Long>{
 
     @Autowired
     private AccountRepository accountRepository;
@@ -24,12 +25,7 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private TransactionHistoryRepository transactionHistoryRepository;
 
-    public Account save(Account account) {
-        Account result = accountRepository.save(account);
-        return result;
-    }
-
-    public Account getAccount(Integer accountNumber) {
+    public Account findByAccount(Integer accountNumber) {
         Account result = accountRepository.findOneByAccountNumber(accountNumber);
         return result;
     }
@@ -97,5 +93,10 @@ public class AccountServiceImpl implements AccountService {
         }
         return value;
 
+    }
+
+    @Override
+    public BaseRepository<Account, Long> getRepository() {
+      return accountRepository;
     }
 }

@@ -21,72 +21,72 @@ import com.borelanjo.despesas.domain.model.Account;
 @SpringBootTest
 public class AccountRepositoryIntegrationTests {
 
-	@Autowired
-	private AccountRepository accountRepository;
-	
-	@Before
-	public void setUp() {
-		this.accountRepository.deleteAll();
-	}
+  @Autowired
+  private AccountRepository accountRepository;
 
-	@Test
-	public void findAllAccounts() {
-		
-		accountRepository.save(new AccountBuilder()
-				.withAccountNumber(1)
-				.withBalance(5.0)
-				.build());
-		
-		accountRepository.save(new AccountBuilder()
-				.withAccountNumber(2)
-				.withBalance(5.0)
-				.build());
+  @Before
+  public void setUp() {
+    this.accountRepository.deleteAll();
+  }
 
-		List<Account> accounts = accountRepository.findAll();
-		assertThat(accounts.size(), equalTo(2));
-	}
+  @Test
+  public void findAllAccounts() {
 
-	@Test
-	public void createAccount() {
+    accountRepository.save(new AccountBuilder()
+        .withAccountNumber(1)
+        .withBalance(5.0)
+        .build());
 
-		Account account = new AccountBuilder()
-				.withAccountNumber(1)
-				.withBalance(5.0)
-				.build();
+    accountRepository.save(new AccountBuilder()
+        .withAccountNumber(2)
+        .withBalance(5.0)
+        .build());
 
-		Account result = this.accountRepository.save(account);
-		
-		assertThat(result.getAccountNumber(), equalTo(account.getAccountNumber()));
-		assertThat(result.getBalance(), equalTo(account.getBalance()));
-	}
+    List<Account> accounts = accountRepository.findAll();
+    assertThat(accounts.size(), equalTo(2));
+  }
 
-	@Test
-	public void findAccountNumber() {
+  @Test
+  public void createAccount() {
 
-		Integer accountNumber = 123456;
-		
-		this.accountRepository.save(new AccountBuilder()
-				.withAccountNumber(accountNumber)
-				.withBalance(5.0)
-				.build());
+    Account account = new AccountBuilder()
+        .withAccountNumber(1)
+        .withBalance(5.0)
+        .build();
 
-		Account account = this.accountRepository.findOneByAccountNumber(accountNumber);
-		assertThat(account.getAccountNumber(), equalTo(accountNumber));
-	}
+    Account result = this.accountRepository.save(account);
 
-	@Test
-	public void updateBalance() {
+    assertThat(result.getAccountNumber(), equalTo(account.getAccountNumber()));
+    assertThat(result.getBalance(), equalTo(account.getBalance()));
+  }
 
-		Integer accountNumber = 123456;
-		
-		Account account = this.accountRepository.save(new AccountBuilder()
-				.withAccountNumber(accountNumber)
-				.withBalance(5.0)
-				.build());
+  @Test
+  public void findAccountNumber() {
 
-		account.setBalance(12.0);
-		Account result = this.accountRepository.save(account);
-		assertThat(result.getBalance(), equalTo(12.0));
-	}
+    Integer accountNumber = 123456;
+
+    this.accountRepository.save(new AccountBuilder()
+        .withAccountNumber(accountNumber)
+        .withBalance(5.0)
+        .build());
+
+    Account account = this.accountRepository.findOneByAccountNumber(accountNumber);
+    assertThat(account.getAccountNumber(), equalTo(accountNumber));
+  }
+
+  @Test
+  public void updateBalance() {
+
+    Integer accountNumber = 123456;
+
+    Account account = this.accountRepository
+        .save(new AccountBuilder()
+            .withAccountNumber(accountNumber)
+            .withBalance(5.0).build());
+
+    account.setBalance(12.0);
+    Account result = this.accountRepository.save(account);
+    assertThat(result.getBalance(), equalTo(12.0));
+  }
 
 }

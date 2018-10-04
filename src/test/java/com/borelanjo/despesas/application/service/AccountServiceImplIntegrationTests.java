@@ -46,7 +46,7 @@ public class AccountServiceImplIntegrationTests {
                 .withBalance(10000.0)
                 .build();
 
-        Account result = this.serviceImpl.save(accountExpected);
+        Account result = this.serviceImpl.create(accountExpected);
 
         assertThat(result.getBalance()).isEqualTo(accountExpected.getBalance());
         assertThat(result.getAccountNumber()).isEqualTo(accountExpected.getAccountNumber());
@@ -55,7 +55,9 @@ public class AccountServiceImplIntegrationTests {
     @Test
     public void addTransaction() {
 
-        Account accountExpected = new AccountBuilder().withAccountNumber(123460).withBalance(5.0).build();
+        Account accountExpected = new AccountBuilder()
+            .withAccountNumber(123460)
+            .withBalance(5.0).build();
         this.accountRepository.save(accountExpected);
 
         TransactionHistory transactionHistory = this.serviceImpl.addTransaction(accountExpected.getAccountNumber(),

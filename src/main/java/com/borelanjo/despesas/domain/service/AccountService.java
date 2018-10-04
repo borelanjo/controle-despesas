@@ -6,11 +6,9 @@ import com.borelanjo.despesas.domain.enumeration.TransactionType;
 import com.borelanjo.despesas.domain.model.Account;
 import com.borelanjo.despesas.domain.model.TransactionHistory;
 
-public interface AccountService {
+public interface AccountService<T,ID> extends BaseService<T, ID>{
 
-    Account save(Account account);
-
-    Account getAccount(Integer accountNumber);
+    Account findByAccount(Integer accountNumber);
 
     TransactionHistory addTransaction(Integer accountNumber, TransactionType type, Double value);
 

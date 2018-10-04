@@ -32,7 +32,7 @@ import org.modelmapper.ModelMapper;
 public class AccountController {
 
     @Autowired
-    private AccountService accountService;
+    private AccountService<Account, Long> accountService;
     
     @Autowired
     private ResponseServiceImpl responseService;
@@ -44,7 +44,7 @@ public class AccountController {
     @ResponseBody
     @Transactional(readOnly = false)
     public ResponseEntity<ResponseTO<AccountResponseTO>> createAccount(@RequestBody AccountRequestTO requestTO) {
-        Account account = accountService.save(modelMapper.map(requestTO, Account.class));
+        Account account = accountService.create(modelMapper.map(requestTO, Account.class));
         return responseService.ok(modelMapper.map(account, AccountResponseTO.class));
     }
 
@@ -52,7 +52,7 @@ public class AccountController {
     @ResponseBody
     @Transactional(readOnly = true)
     public ResponseEntity<ResponseTO<Account>> getAccount(@PathVariable("accountNumber") Integer accountNumber) {
-        return responseService.ok(accountService.getAccount(accountNumber));
+        return responseService.ok(accountService.findByAccount(accountNumber));
     }
 
     @GetMapping("/{accountNumber}/transactionHistory")

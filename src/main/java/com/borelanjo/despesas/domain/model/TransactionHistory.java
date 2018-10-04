@@ -1,14 +1,8 @@
 package com.borelanjo.despesas.domain.model;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -16,13 +10,9 @@ import com.borelanjo.despesas.infrastructure.persistence.hibernate.listener.Tran
 
 @Entity(name = "t_transaction_history")
 @EntityListeners(TransactionHistoryListener.class)
-public class TransactionHistory implements Serializable {
+public class TransactionHistory extends BaseEntity<Long>{
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_account")
@@ -36,9 +26,6 @@ public class TransactionHistory implements Serializable {
 
     @Column(nullable = false)
     private Double value;
-
-    @Column(name = "dt_created", nullable = false)
-    private LocalDateTime created;
 
     protected TransactionHistory() {
     }
@@ -88,14 +75,6 @@ public class TransactionHistory implements Serializable {
 
     public void setValue(Double value) {
         this.value = value;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
     }
 
 }

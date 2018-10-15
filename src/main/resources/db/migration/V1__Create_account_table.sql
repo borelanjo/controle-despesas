@@ -5,7 +5,8 @@ create table t_account (
     deleted BOOLEAN not null,
     activated BOOLEAN not null,
     dt_created TIMESTAMP WITHOUT TIME ZONE not null,
-    dt_updated TIMESTAMP WITHOUT TIME ZONE not null
+    dt_updated TIMESTAMP WITHOUT TIME ZONE not null,
+    CONSTRAINT uk_account_account_number UNIQUE (account_number)
 );
 
 create table t_transaction_history (

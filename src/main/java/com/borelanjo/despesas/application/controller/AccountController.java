@@ -32,7 +32,7 @@ import org.modelmapper.ModelMapper;
 public class AccountController {
 
     @Autowired
-    private AccountService<Account, Long> accountService;
+    private AccountService accountService;
     
     @Autowired
     private ResponseServiceImpl responseService;
@@ -52,10 +52,10 @@ public class AccountController {
     @ResponseBody
     @Transactional(readOnly = true)
     public ResponseEntity<ResponseTO<AccountResponseTO>> getAccount(@PathVariable("id") Long id) {
-        return responseService.ok(modelMapper.map(accountService.findById(id).get(), AccountResponseTO.class));
+        return responseService.ok(modelMapper.map(accountService.findById(id), AccountResponseTO.class));
     }
 
-    @GetMapping("/{id}/transactionHistory")
+    @GetMapping("/{id}/transaction/history")
     @ResponseBody
     @Transactional(readOnly = true)
     public ResponseEntity<ResponseTO<List<TransactionHistory>>> showHistory(@PathVariable("id") Long id) {
@@ -63,22 +63,22 @@ public class AccountController {
         return responseService.ok(accountService.showHistory(id));
     }
 
-    @PatchMapping("/{id}/transactionHistory")
+    @PatchMapping("/{id}/transaction")
     @ResponseBody
     @Transactional(readOnly = false)
-    public ResponseEntity<ResponseTO<TransactionHistory>> setBalance(@PathVariable("accountNumber") Integer accountNumber,
+    public ResponseEntity<ResponseTO<TransactionHistory>> setBalance(@PathVariable("id") Long id,
             @RequestBody TransactionHistory transactionHistory) {
         TransactionType transactionType = TransactionType.valueOf(transactionHistory.getType());
-        return responseService.ok(accountService.addTransaction(accountNumber, transactionType, transactionHistory.getValue()));
+        return responseService.ok(accountService.addTransaction(id, transactionType, transactionHistory.getValue()));
     }
 
-    @PutMapping("/{sourceAccountNumber}/transfer")
+    @PutMapping("/{id}/transaction/transfer")
     @ResponseBody
     @Transactional(readOnly = false)
-    public ResponseEntity<ResponseTO<TransactionHistory>> transfer(@PathVariable("sourceAccountNumber") Integer sourceAccountNumber,
+    public ResponseEntity<ResponseTO<TransactionHistory>> transfer(@PathVariable("id") Long id,
             @RequestBody TransferDTO transferDTO) {
 
-        return responseService.ok(accountService.transfer(sourceAccountNumber, transferDTO.getDestinationAccountNumber(),
+        return responseService.ok(accountService.transfer(id, transferDTO.getDestinationId(),
                 transferDTO.getValue()));
     }
 

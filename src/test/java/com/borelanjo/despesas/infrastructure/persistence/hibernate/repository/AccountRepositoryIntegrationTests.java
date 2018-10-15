@@ -42,7 +42,7 @@ public class AccountRepositoryIntegrationTests {
         .withBalance(5.0)
         .build());
 
-    List<Account> accounts = accountRepository.findAll();
+    List<Account> accounts = accountRepository.findByDeleted(false);
     assertThat(accounts.size(), equalTo(2));
   }
 

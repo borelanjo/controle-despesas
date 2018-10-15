@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
+import com.borelanjo.despesas.application.service.exception.EntityIsNotPresent;
 import com.borelanjo.despesas.domain.model.BaseEntity;
 import com.borelanjo.despesas.domain.service.BaseService;
 import com.borelanjo.despesas.infrastructure.persistence.hibernate.repository.BaseRepository;
@@ -23,42 +24,33 @@ public abstract class BaseServiceImpl<T extends BaseEntity<ID>, ID> implements B
   }
 
   @Override
-  public Optional<T> findById(ID id) {
-    return repository.findById(id);
+  public T findById(ID id) {
+      Optional<T> entity = repository.findByIdAndDeleted(id, false);
+      if (!entity.isPresent()) {
+          throw new EntityIsNotPresent();
+        }
+    return entity.get();
   }
 
   @Override
   public T update(ID id, T entity) {
-    Optional<T> oldEntity = repository.findById(id);
-
-    if (!oldEntity.isPresent()) {
-      return null;
-    }
+    findById(id);
     setId(entity, id);
-    return repository.save(entity);
+    return create(entity);
   }
 
   @Override
   public void delete(ID id) {
-    Optional<T> optionalEntity = repository.findById(id);
-
-    if (!optionalEntity.isPresent()) {
-      return;
-    }
-    optionalEntity.get().delete();
-    repository.save(optionalEntity.get());
+    T entity = findById(id);
+    entity.delete();
+    create(entity);
   }
 
   @Override
   public void switchActivation(ID id) {
-    Optional<T> optionalEntity = repository.findById(id);
-
-    if (!optionalEntity.isPresent()) {
-      return;
-    }
-    optionalEntity.get().switchActivation();
-    ;
-    repository.save(optionalEntity.get());
+    T entity = findById(id);
+    entity.switchActivation();
+    create(entity);
 
   }
 
@@ -69,6 +61,6 @@ public abstract class BaseServiceImpl<T extends BaseEntity<ID>, ID> implements B
 
   }
 
-  public abstract BaseRepository<T, ID> getRepository();
+  protected abstract BaseRepository<T, ID> getRepository();
 
 }

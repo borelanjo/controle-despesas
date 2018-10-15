@@ -6,25 +6,25 @@ public class TransferDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer destinationAccountNumber;
+    private Long destinationId;
 
     private Double value;
 
     public TransferDTO() {
     }
 
-    public TransferDTO(Integer destinationAccountNumber, Double value) {
-        this.destinationAccountNumber = destinationAccountNumber;
+    public TransferDTO(Long destinationId, Double value) {
+        this.destinationId = destinationId;
 
         this.value = value;
     }
 
-    public Integer getDestinationAccountNumber() {
-        return destinationAccountNumber;
+    public Long getDestinationId() {
+        return destinationId;
     }
 
-    public void setDestinationAccountNumber(Integer destinationAccountNumber) {
-        this.destinationAccountNumber = destinationAccountNumber;
+    public void setDestinationId(Long destinationId) {
+        this.destinationId = destinationId;
     }
 
     public Double getValue() {

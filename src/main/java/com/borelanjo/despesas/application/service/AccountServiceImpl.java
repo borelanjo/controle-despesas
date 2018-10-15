@@ -1,6 +1,7 @@
 package com.borelanjo.despesas.application.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import com.borelanjo.despesas.infrastructure.persistence.hibernate.repository.Tr
 
 @Component("accountService")
 @Transactional
-public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implements AccountService<Account, Long>{
+public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implements AccountService{
 
     @Autowired
     private AccountRepository accountRepository;
@@ -30,8 +31,8 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implement
         return result;
     }
 
-    public TransactionHistory addTransaction(Integer accountNumber, TransactionType transactionType, Double value) {
-        Account account = this.accountRepository.findOneByAccountNumber(accountNumber);
+    public TransactionHistory addTransaction(Long id, TransactionType transactionType, Double value) {
+        Account account = findById(id);
         Assert.notNull(account, "Conta não deve ser nula");
         value = fixValue(transactionType, value);
         account.setBalance(account.getBalance() + value);
@@ -43,35 +44,40 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implement
         return result;
     }
 
-    public Double checkBalance(Integer accountNumber) {
-        Account account = this.accountRepository.findOneByAccountNumber(accountNumber);
+    public Double checkBalance(Long id) {
+        Account account = findById(id);
         return account.getBalance();
     }
 
-    public TransactionHistory transfer(Integer sourceAccountNumber, Integer destinationAccountNumber, Double value) {
-        Account sourceAccount = this.accountRepository.findOneByAccountNumber(sourceAccountNumber);
-        Assert.notNull(sourceAccount, "Conta de origem não pode ser nula");
-        Account destinationAccount = this.accountRepository.findOneByAccountNumber(destinationAccountNumber);
-        Assert.notNull(sourceAccount, "Conta de destino não pode ser nula");
-        String sourceDescription = null;
-        String destinationDescription = TransactionType.INCREASE.type() + ": Recebido R$ " + value + " da conta "
-                + sourceAccountNumber;
+    public TransactionHistory transfer(Long sourceId, Long destinationId, Double value) {
+        TransactionHistory result;
+        try {
+            Account sourceAccount = findById(sourceId);
+            Account destinationAccount = findById(destinationId);
+            String sourceDescription = null;
+            String destinationDescription = TransactionType.INCREASE.type() + ": Recebido R$ " + value + " da conta "
+                    + sourceAccount.getAccountNumber();
 
-        sourceAccount.setBalance(sourceAccount.getBalance() - value);
-        destinationAccount.setBalance(destinationAccount.getBalance() + value);
+            sourceAccount.setBalance(sourceAccount.getBalance() - value);
+            destinationAccount.setBalance(destinationAccount.getBalance() + value);
 
-        sourceDescription = TransactionType.DECREASE.type() + ": Transferido R$ " + value + " para a conta "
-                + destinationAccountNumber + ". Novo Saldo: R$" + sourceAccount.getBalance();
-        destinationDescription = TransactionType.INCREASE.type() + ": Recebido R$ " + value + " da conta "
-                + sourceAccountNumber + ". Novo Saldo: R$" + destinationAccount.getBalance();
+            sourceDescription = String.format("%1$s: Transferido R$ %2$s para a conta %3$s. Novo Saldo: R$%4$s",
+                    TransactionType.DECREASE.type(), value, destinationAccount.getAccountNumber(),
+                    sourceAccount.getBalance());
+            destinationDescription = String.format("%1$s: Recebido R$ %2$s da conta %3$s. Novo Saldo: R$%4$s",
+                    TransactionType.INCREASE.type(), value, sourceAccount.getAccountNumber(),
+                    destinationAccount.getBalance());
 
-        TransactionHistory sourceTransactionHistory = new TransactionHistory(sourceAccount,
-                TransactionType.DECREASE.type(), sourceDescription, value);
-        TransactionHistory destinationTransactionHistory = new TransactionHistory(destinationAccount,
-                TransactionType.INCREASE.type(), destinationDescription, value);
+            TransactionHistory sourceTransactionHistory = new TransactionHistory(sourceAccount,
+                    TransactionType.DECREASE.type(), sourceDescription, value);
+            TransactionHistory destinationTransactionHistory = new TransactionHistory(destinationAccount,
+                    TransactionType.INCREASE.type(), destinationDescription, value);
 
-        this.transactionHistoryRepository.save(destinationTransactionHistory);
-        TransactionHistory result = transactionHistoryRepository.save(sourceTransactionHistory);
+            this.transactionHistoryRepository.save(destinationTransactionHistory);
+            result = transactionHistoryRepository.save(sourceTransactionHistory);
+        } catch (NoSuchElementException e) {
+            throw new RuntimeException("Conta não existe!");
+        }
         return result;
     }
 
@@ -96,6 +102,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implement
 
     @Override
     public BaseRepository<Account, Long> getRepository() {
-      return accountRepository;
+        return accountRepository;
     }
+
 }

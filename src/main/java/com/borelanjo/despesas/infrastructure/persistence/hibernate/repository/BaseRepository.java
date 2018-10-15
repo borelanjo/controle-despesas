@@ -9,11 +9,11 @@ import org.springframework.data.repository.Repository;
 @NoRepositoryBean
 public interface BaseRepository<T,ID> extends Repository<T, ID>{
   
-  List<T> findAll();
+  List<T> findByDeleted(Boolean deleted);
   
   T save(T entity);
   
-  Optional<T> findById(ID id);
+  Optional<T> findByIdAndDeleted(ID id, Boolean deleted);
 
   void deleteAll();
 

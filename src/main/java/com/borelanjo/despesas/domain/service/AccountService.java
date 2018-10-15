@@ -6,15 +6,15 @@ import com.borelanjo.despesas.domain.enumeration.TransactionType;
 import com.borelanjo.despesas.domain.model.Account;
 import com.borelanjo.despesas.domain.model.TransactionHistory;
 
-public interface AccountService<T,ID> extends BaseService<T, ID>{
+public interface AccountService extends BaseService<Account, Long>{
 
     Account findByAccount(Integer accountNumber);
 
-    TransactionHistory addTransaction(Integer accountNumber, TransactionType type, Double value);
+    TransactionHistory addTransaction(Long id, TransactionType type, Double value);
 
-    Double checkBalance(Integer accountNumber);
+    Double checkBalance(Long id);
 
-    TransactionHistory transfer(Integer sourceAccount, Integer destinationAccount, Double value);
+    TransactionHistory transfer(Long souceId, Long destinationId, Double value);
 
     List<TransactionHistory> showHistory(Long id);
 

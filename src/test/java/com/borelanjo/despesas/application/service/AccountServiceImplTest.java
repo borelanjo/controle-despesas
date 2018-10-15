@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -33,6 +36,8 @@ public class AccountServiceImplTest {
 
     @Autowired
     AccountServiceImpl serviceImpl;
+    
+    private Integer accountNumber = 1111;
 
     @Before
     public void setUp() {
@@ -59,6 +64,36 @@ public class AccountServiceImplTest {
         
         assertThat(result.getBalance()).isEqualTo(accountExpected.getBalance());
         assertThat(result.getAccountNumber()).isEqualTo(accountExpected.getAccountNumber());
+    }
+    
+    @Test
+    public void testFindAll() throws Exception {
+        serviceImpl.create(generateAccount());
+        serviceImpl.create(generateAccount());
+        Long accountId = serviceImpl.create(generateAccount()).getId();
+        
+        serviceImpl.delete(accountId);
+        
+        List<Account> list = serviceImpl.findAll();
+        
+        assertThat(2).isEqualTo(list.size());
+    }
+    
+    @Test
+    public void testFindAllPage() throws Exception {
+        Pageable pageable = PageRequest.of(0, 1);
+        
+        serviceImpl.create(generateAccount());
+        serviceImpl.create(generateAccount());
+        Long accountId = serviceImpl.create(generateAccount()).getId();
+        
+        serviceImpl.delete(accountId);
+        
+        Page<Account> pages = serviceImpl.findAll(pageable);
+        
+        assertThat(2).isEqualTo(pages.getTotalPages());
+        assertThat(1).isEqualTo(pages.getNumberOfElements());
+        assertThat(2).isEqualTo(pages.getTotalElements());
     }
 
     @Test
@@ -163,7 +198,7 @@ public class AccountServiceImplTest {
     
     private Account generateAccount() {
         Account accountExpected = new AccountBuilder()
-                .withAccountNumber(1111)
+                .withAccountNumber(accountNumber++)
                 .withBalance(10000.0)
                 .build();
         return accountExpected;

@@ -1,47 +1,134 @@
-# desafio-despesas
+# desafio-despesas-elton-leite
 
-### Desafio Conductor de Seleção 
-Olá, queremos convidá-lo a participar de nosso desafio de seleção.  Pronto para participar? Seu trabalho será visto por nosso time e você receberá ao final um feedback sobre o que achamos do seu trabalho. Não é legal?
+Projeto de desafio feito por Elton Leite Ayres de Medeiros Borges
+## Passos para execução
 
-### Sobre a oportunidade 
-A vaga é para Desenvolvedor Java, temos vagas com diversos níveis de senioridade e para cada um deles utilizaremos critérios específicos considerando esse aspecto, combinado? 
-Se você for aprovado nesta etapa, será convidado para uma entrevista final com nosso time técnico.
+Para que o projeto seja executado é necessário que:
 
-### Desafio Técnico
-  Desenvolver um sistema de gerenciamento de despesas, para manter controle entre gastos e receita:
-  - Pré-requisitos:
-    ```
-    * Desenvolver os recursos em API Rest;
-    * Se for persistir os dados em banco de dados, utilizar o MySql.
-    ```
+ - Seja criado um banco chamado 'despesas_elton_leite'
+	 - Caso seja necessário deve ser mudado a senha e o usuário do banco em: `\src\main\resources\application.properties`
+ - Deve-se executar o `src\main\java\com\borelanjo\despesas\DespesasApplication.java` como uma aplicação java para iniciar a aplicação;
+	 - Pode ser importado no Postman o arquivo contido em: `src\main\resources\despesas-elton-leite.postman_collection.json`
 
-  - O que esperamos como escopo mínimo:
-    ```
-    * Adicionar Despesa e Receita;
-    * Histórico de movimentações;
-    * Consultar saldo atual;
-    * Transferir crédito entre contas;
-    ```
-    
-  - O que vamos avaliar:
-    ```
-    * Seu código; 
-    * Organização;
-    * Boas práticas;
-    ```
+## O que foi feito
 
-  - Dependências
-    ```
-    * JDK 1.8+
-    * Maven 3+
-    * JUnit 4+
-    * Spring 4+ (Opcional)
-    ```
+Foi criado uma aplicação restfull, usando JPA com Implementação Hibernate e o framework Spring. Pode ser testado a aplicação usando as seguintes url;
 
-### Instruções
-      1. Faça o fork do desafio e crie uma branch 'desafio_despesas_nome_candidato';
-      2. Desenvolva. Você terá 2 (dois) dias a partir da data do envio do desafio; 
-      3. Após concluir seu trabalho faça um push; 
-      4. Crie um arquivo de texto com a nomenclatura README.MD com a explicação de como devemos executar o 
-        projeto e com uma descrição do que foi feito; 
-      5. Solicite o Merge request para o repositório original e que a força esteja com você.
+### POST localhost:8080/account
+
+Usado para criar uma conta.
+
+#### HEADERS
+|Content-Type|application/json|
+|-|-|
+
+#### BODY
+```
+{
+"accountNumber":123456,
+"balance":1000.500
+}
+```
+#### Exemplo de requisição
+
+```
+curl --request POST \
+  --url http://localhost:8080/account \
+  --header 'content-type: application/json' \
+  --data '{
+"accountNumber":123456,
+"balance":1000.500
+}'
+```
+
+### PATCH localhost:8080/account/123460
+
+Utilizado para atualizar um balanço. O tipo deve ser passado como DECREASE (Despesa) ou INCREASE (Receita) e ele que determina se o valor vai ser positivo ou negativo.
+
+#### HEADERS
+|Content-Type|application/json|
+|-|-|
+
+#### BODY
+```
+{
+"type":"DECREASE",
+"value":1.0
+}
+```
+#### Exemplo de requisição
+
+```
+curl --request PATCH \
+  --url http://localhost:8080/account/180625 \
+  --header 'content-type: application/json' \
+  --data '{
+"type":"DECREASE",
+"value":1.0
+}'
+```
+
+### GET localhost:8080/account
+
+Retorna um objeto do tipo conta recebendo um número de conta como parâmetro
+`localhost:8080/account/123456`
+
+#### HEADERS
+|Content-Type|application/json|
+|-|-|
+
+
+#### Exemplo de requisição
+
+```
+curl --request GET \
+  --url http://localhost:8080/account/123456 \
+  --header 'content-type: application/json'
+```
+
+### localhost:8080/account/123460/transfer
+
+Realiza uma transferência de uma conta de origem para uma conta de destino
+
+`localhost:8080/account/:sourceAccountNumber/transfer`
+
+#### HEADERS
+|Content-Type|application/json|
+|-|-|
+
+#### BODY
+```
+{
+"destinationAccountNumber":180626,
+"value":5.3
+}
+```
+#### Exemplo de requisição
+
+```
+curl --request PUT \
+  --url http://localhost:8080/account/180625/transfer \
+  --header 'content-type: application/json' \
+  --data '{
+"destinationAccountNumber":180626,
+"value":5.3
+}'
+```
+
+### GET http://localhost:8080/account/123460/transactionHistory
+
+Mostra o histórico de transações de uma determinada conta.
+
+`http://localhost:8080/account/123460/transactionHistory`
+
+#### HEADERS
+|Content-Type|application/json|
+|-|-|
+
+
+#### Exemplo de requisição
+
+```
+curl --request GET \
+  --url http://localhost:8080/account/123460/transactionHistory
+```

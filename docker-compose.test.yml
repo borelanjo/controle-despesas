@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  #############################################################
+  ######################### DATABASES #########################
+  #############################################################
+
+  db-despesas-test:
+    container_name: db-despesas-test
+    image: postgres:9.6
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: despesas
+      POSTGRES_USER: despesas
+      POSTGRES_PASSWORD: despesas
+      PGDATA: /tmp
+    volumes:
+      - ./docker/postgres/data-despesa-test:/var/lib/postgresql/data

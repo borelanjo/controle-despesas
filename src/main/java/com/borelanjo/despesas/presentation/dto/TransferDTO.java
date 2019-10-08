@@ -2,39 +2,37 @@ package com.borelanjo.despesas.presentation.dto;
 
 import java.io.Serializable;
 
-public class TransferDTO implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	
-	private Integer destinationAccountNumber;
-	
-	private Double value;
-	
-	public TransferDTO() {
-	}
-	
-	public TransferDTO(Integer destinationAccountNumber, Double value) {
-		this.destinationAccountNumber = destinationAccountNumber;
+public class TransferDTO implements Serializable {
 
-		this.value = value;
-	}
+    private static final long serialVersionUID = 1L;
 
-	public Integer getDestinationAccountNumber() {
-		return destinationAccountNumber;
-	}
+    private Long destinationId;
 
-	public void setDestinationAccountNumber(Integer destinationAccountNumber) {
-		this.destinationAccountNumber = destinationAccountNumber;
-	}
+    private Double value;
 
-	public Double getValue() {
-		return value;
-	}
+    public TransferDTO() {
+    }
 
-	public void setValue(Double value) {
-		this.value = value;
-	}
-	
-	
+    public TransferDTO(Long destinationId, Double value) {
+        this.destinationId = destinationId;
+
+        this.value = value;
+    }
+
+    public Long getDestinationId() {
+        return destinationId;
+    }
+
+    public void setDestinationId(Long destinationId) {
+        this.destinationId = destinationId;
+    }
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
+    }
 
 }

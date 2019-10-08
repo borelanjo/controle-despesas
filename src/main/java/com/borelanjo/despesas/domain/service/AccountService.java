@@ -6,18 +6,16 @@ import com.borelanjo.despesas.domain.enumeration.TransactionType;
 import com.borelanjo.despesas.domain.model.Account;
 import com.borelanjo.despesas.domain.model.TransactionHistory;
 
-public interface AccountService {
-	
-	Account createAccount(Integer accountNumber, Double balance);
-	
-	Account getAccount(Integer accountNumber);
-	
-	TransactionHistory addTransaction(Integer accountNumber, TransactionType type, Double value);
-	
-	Double checkBalance(Integer accountNumber);
-	
-	TransactionHistory transfer(Integer sourceAccount, Integer destinationAccount, Double value);
-	
-	List<TransactionHistory> showHistory(Integer accountNumber);
+public interface AccountService extends BaseService<Account, Long>{
+
+    Account findByAccount(Integer accountNumber);
+
+    TransactionHistory addTransaction(Long id, TransactionType type, Double value);
+
+    Double checkBalance(Long id);
+
+    TransactionHistory transfer(Long souceId, Long destinationId, Double value);
+
+    List<TransactionHistory> showHistory(Long id);
 
 }

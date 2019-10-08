@@ -14,8 +14,9 @@ public class TransactionHistoryBuilder {
 
 	private Double value;
 
-	public AccountBuilder withAccount(AccountBuilder accountBuilder) {
-		return accountBuilder;
+	public TransactionHistoryBuilder withAccount(Account account) {
+		this.account = account;
+		return this;
 	}
 
 	public TransactionHistoryBuilder withType(TransactionType type) {
@@ -32,7 +33,7 @@ public class TransactionHistoryBuilder {
 		this.value = value;
 		return this;
 	}
-	
+
 	public TransactionHistory build() {
 		return new TransactionHistory(account, type, description, value);
 	}

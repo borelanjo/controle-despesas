@@ -11,8 +11,10 @@ public interface TransactionHistoryRepository extends Repository<TransactionHist
 	
 	List<TransactionHistory> findAll();
 	
-	List<TransactionHistory> findByAccount(Account account);
+	List<TransactionHistory> findByAccountId(Long accountId);
 	
 	TransactionHistory save(TransactionHistory transactionHistory);
+	
+	void deleteAll();
 
 }

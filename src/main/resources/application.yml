@@ -5,7 +5,7 @@ spring:
 # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/despesas?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://${DB_ALIAS:localhost}:5432/despesas?createDatabaseIfNotExist=true
     username: despesas
     password: despesas
 # JPA properties
@@ -22,9 +22,13 @@ logging:
   pattern:
     console: "%d %-5level %logger : %msg%n"
   level:
-    org.springframework: INFO
-    org.hibernate: DEBUG
+    org.springframework: ERROR
+    org.hibernate: ERROR
 # Server configuration
 server:
   port: 8080
   sessionTimeout: 30
+  
+desafio-despesas:
+  security:
+    allow-origin: ${ALLOWED_ORIGIN:http://localhost:4200}

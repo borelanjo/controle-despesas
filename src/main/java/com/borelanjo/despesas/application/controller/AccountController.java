@@ -3,7 +3,7 @@ package com.borelanjo.despesas.application.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -11,59 +11,75 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.borelanjo.despesas.domain.enumeration.TransactionType;
 import com.borelanjo.despesas.domain.model.Account;
 import com.borelanjo.despesas.domain.model.TransactionHistory;
 import com.borelanjo.despesas.domain.service.AccountService;
+import com.borelanjo.despesas.infrastructure.service.ResponseServiceImpl;
+import com.borelanjo.despesas.presentation.dto.ResponseTO;
 import com.borelanjo.despesas.presentation.dto.TransferDTO;
+import com.borelanjo.despesas.presentation.dto.account.AccountRequestTO;
+import com.borelanjo.despesas.presentation.dto.account.AccountResponseTO;
 
-@Controller
+import org.modelmapper.ModelMapper;
+
+@RestController
+@RequestMapping("/account")
 public class AccountController {
 
-	@Autowired
-	private AccountService accountService;
+    @Autowired
+    private AccountService accountService;
+    
+    @Autowired
+    private ResponseServiceImpl responseService;
+    
+    @Autowired
+    private ModelMapper modelMapper;
 
-	@PostMapping("/account")
-	@ResponseBody
-	@Transactional(readOnly = false)
-	public Account createAccout(@RequestBody Account account) {
-		return accountService.createAccount(account.getAccountNumber(), account.getBalance());
-	}
+    @PostMapping
+    @ResponseBody
+    @Transactional(readOnly = false)
+    public ResponseEntity<ResponseTO<AccountResponseTO>> createAccount(@RequestBody AccountRequestTO requestTO) {
+        Account account = accountService.create(modelMapper.map(requestTO, Account.class));
+        return responseService.ok(modelMapper.map(account, AccountResponseTO.class));
+    }
 
-	@GetMapping("/account/{accountNumber}")
-	@ResponseBody
-	@Transactional(readOnly = true)
-	public Account getAccount(@PathVariable("accountNumber") Integer accountNumber) {
-		return accountService.getAccount(accountNumber);
-	}
+    @GetMapping("/{id}")
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public ResponseEntity<ResponseTO<AccountResponseTO>> getAccount(@PathVariable("id") Long id) {
+        return responseService.ok(modelMapper.map(accountService.findById(id), AccountResponseTO.class));
+    }
 
-	@GetMapping("/account/{accountNumber}/transactionHistory")
-	@ResponseBody
-	@Transactional(readOnly = true)
-	public List<TransactionHistory> showHistory(@PathVariable("accountNumber") Integer accountNumber) {
+    @GetMapping("/{id}/transaction/history")
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public ResponseEntity<ResponseTO<List<TransactionHistory>>> showHistory(@PathVariable("id") Long id) {
 
-		return accountService.showHistory(accountNumber);
-	}
+        return responseService.ok(accountService.showHistory(id));
+    }
 
-	@PatchMapping("/account/{accountNumber}")
-	@ResponseBody
-	@Transactional(readOnly = false)
-	public TransactionHistory setBalance(@PathVariable("accountNumber") Integer accountNumber,
-			@RequestBody TransactionHistory transactionHistory) {
-		TransactionType transactionType = TransactionType.valueOf(transactionHistory.getType());
-		return accountService.addTransaction(accountNumber, transactionType, transactionHistory.getValue());
-	}
+    @PatchMapping("/{id}/transaction")
+    @ResponseBody
+    @Transactional(readOnly = false)
+    public ResponseEntity<ResponseTO<TransactionHistory>> setBalance(@PathVariable("id") Long id,
+            @RequestBody TransactionHistory transactionHistory) {
+        TransactionType transactionType = TransactionType.valueOf(transactionHistory.getType());
+        return responseService.ok(accountService.addTransaction(id, transactionType, transactionHistory.getValue()));
+    }
 
-	@PutMapping("/account/{sourceAccountNumber}/transfer")
-	@ResponseBody
-	@Transactional(readOnly = false)
-	public TransactionHistory transfer(@PathVariable("sourceAccountNumber") Integer sourceAccountNumber,
-			@RequestBody TransferDTO transferDTO) {
+    @PutMapping("/{id}/transaction/transfer")
+    @ResponseBody
+    @Transactional(readOnly = false)
+    public ResponseEntity<ResponseTO<TransactionHistory>> transfer(@PathVariable("id") Long id,
+            @RequestBody TransferDTO transferDTO) {
 
-		return accountService.transfer(sourceAccountNumber, transferDTO.getDestinationAccountNumber(),
-				transferDTO.getValue());
-	}
+        return responseService.ok(accountService.transfer(id, transferDTO.getDestinationId(),
+                transferDTO.getValue()));
+    }
 
 }
